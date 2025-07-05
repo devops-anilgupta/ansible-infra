@@ -1,0 +1,24 @@
+# Ansible artifacts
+*.retry
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Secrets or credentials
+vault_pass.txt
+*.pem
+*.key
+
+# System
+.DS_Store
+*.swp
+
+# Backup
+*.bak
+*.old
