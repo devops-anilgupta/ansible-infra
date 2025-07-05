@@ -1,0 +1,7 @@
+---
+- name: Basic Ping Test
+  hosts: all
+  become: false
+  tasks:
+    - name: Ping the slave node
+      ansible.builtin.ping:
