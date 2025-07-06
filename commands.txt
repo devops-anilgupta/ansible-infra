@@ -10,7 +10,7 @@ SYNTAX:
 
 🔧 DEV
     ansible-playbook -i inventories/DEV/hosts.ini playbooks/site.yml 
-
+    ansible-playbook -i inventories/DEV/hosts.ini playbooks/nginx-setup.yml
 
 🧪 UAT
     ansible-playbook -i inventories/UAT/hosts.ini playbooks/site.yml 
