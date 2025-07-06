@@ -1,7 +1,12 @@
 # File: playbooks/nginx-setup.yml
 # This playbook installs a group-specific package on webservers and sets the timezone.
 
-# Command: ansible-playbook -i inventories/DEV/hosts.ini playbooks/nginx-setup.yml
+# Command: 
+# ansible-playbook -i inventories/DEV/hosts.ini playbooks/site.yml //This playbook performs a basic ping test on all hosts.
+# ansible-playbook -i inventories/DEV/hosts.ini playbooks/nginx-setup.yml //This playbook installs a group-specific package on webservers and sets the timezone.
+# ansible -i inventories/DEV/hosts.ini webservers -a "curl -I http://localhost" //This command checks if the nginx service is running and accessible on the webservers.
+# ansible -i inventories/DEV/hosts.ini webservers -m ping //This command checks connectivity to the webservers.
+# This playbook installs a group-specific package on webservers and sets the timezone.  
 
 - name: Install group-specific package with shared variables
   hosts: webservers
