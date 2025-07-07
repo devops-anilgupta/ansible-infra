@@ -1,0 +1,61 @@
+# When You Want to Change Version or Configuration:
+# Just edit the <<vars/jenkins.yml>> file.
+    # Example: switch to OpenJDK 17:
+    # java_package: openjdk-17-jdk
+    # Or use a custom Jenkins repo or build (not common, but possible):
+    # jenkins_repo_url: https://pkg.jenkins.io/debian
+
+
+# Jenkins Installation Playbook
+# To run this playbook, use the following command:
+# ansible-playbook -i inventories/DEV/hosts.ini playbooks/jenkins-install.yml
+# Make sure to have the necessary inventory and variable files set up correctly.
+# Command <<ansible-playbook -i inventories/DEV/hosts.ini playbooks/jenkins-install.yml>>
+
+- name: Install Jenkins with configurable options
+  hosts: jenkins_servers
+  become: true
+  vars_files:
+    - ../vars/jenkins.yml
+
+
+  tasks:
+
+    - name: Install Java
+      apt:
+        name: "{{ java_package }}"
+        state: present
+        update_cache: yes
+
+    - name: Add Jenkins repository key
+      apt_key:
+        url: "{{ jenkins_repo_key_url }}"
+        state: present
+
+    - name: Add Jenkins repository
+      apt_repository:
+        repo: "deb {{ jenkins_repo_url }} binary/"
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Jenkins
+      apt:
+        name: "{{ jenkins_package_name }}"
+        state: present
+
+    - name: Ensure Jenkins is started and enabled
+      service:
+        name: "{{ jenkins_service_name }}"
+        state: started
+        enabled: true
+        
+    - name: Check Jenkins service status
+      shell: systemctl status jenkins.service --no-pager
+      register: jenkins_status
+      ignore_errors: yes
+
+    - debug:
+        var: jenkins_status.stdout_lines
