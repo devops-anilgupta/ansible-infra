@@ -1,0 +1,14 @@
+# ansible-playbook -i inventories/DEV/hosts.ini playbooks/copy-files-internally.yml 
+---
+- name: Copy folder on remote host ansible-slave1
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Ensure destination folder exists
+      file:
+        path: /home/ubuntu/destination
+        state: directory
+        mode: '0755'
+
+    - name: Copy files from source to destination (on remote)
+      shell: cp -r /home/ubuntu/source/* /home/ubuntu/destination/
