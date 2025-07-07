@@ -1,0 +1,2 @@
+package_name: jenkins
+env_label: dev-jenkins

@@ -1,0 +1,5 @@
+java_package: openjdk-17-jdk
+jenkins_repo_url: https://pkg.jenkins.io/debian-stable
+jenkins_repo_key_url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+jenkins_package_name: jenkins
+jenkins_service_name: jenkins
