@@ -43,7 +43,7 @@ pipeline {
                     def result = sh(
                         script: """
                             ssh ubuntu@ansible-master '
-                                cd /home/ubuntu/ansible-infra &&
+                                cd /home/ubuntu/ansible_project &&
                                 ansible-playbook -i "${inventoryPath}" "${playbookPath}"
                             '
                         """,
