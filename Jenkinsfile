@@ -11,11 +11,6 @@ pipeline {
         ], description: 'Choose which Ansible playbook to run')
     }
 
-    environment {
-        INVENTORY_PATH = "inventories/${params.ENV.toUpperCase()}/hosts.ini"
-        PLAYBOOK_PATH  = "playbooks/${params.PLAYBOOK}"
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
@@ -24,27 +19,40 @@ pipeline {
                     branch: "${params.ENV}",
                     credentialsId: 'jenkins-master-to-git'
                 )
+                echo "Checked out code for ${params.ENV} environment completed!"
+                sh 'ls -la'
             }
         }
 
         stage('Run Ansible Playbook') {
             steps {
                 script {
+                    def inventoryPath = "inventories/${params.ENV}/hosts.ini"
+                    def playbookPath  = "playbooks/${params.PLAYBOOK}"
+
                     echo "Running ${params.PLAYBOOK} against ${params.ENV} environment"
-                    sh """
-                        ansible-playbook -i "${INVENTORY_PATH}" "${PLAYBOOK_PATH}"
-                    """
+                    
+                    def result = sh(
+                        script: "ansible-playbook -i '${inventoryPath}' '${playbookPath}'",
+                        returnStatus: true
+                    )
+
+                    if (result == 0) {
+                        echo "✅ Playbook ran successfully"
+                    } else {
+                        error("❌ Playbook failed with exit code: ${result}")
+                    }
                 }
             }
         }
     }
 
     post {
-        failure {
-            echo "Playbook failed!"
-        }
         success {
-            echo "Playbook ran successfully!"
+            echo "🎉 Playbook completed successfully!"
+        }
+        failure {
+            echo "❌ Playbook failed!"
         }
     }
 }
