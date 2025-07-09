@@ -16,7 +16,7 @@ pipeline {
             steps {
                 git(
                     url: 'git@github.com:devops-anilgupta/ansible-infra.git',
-                    branch: "${params.ENV}",
+                    branch: "${params.ENV}.toLowerCase()",
                     credentialsId: 'jenkins-master-to-git'
                 )
                 echo "Checked out code for ${params.ENV} environment completed!"
