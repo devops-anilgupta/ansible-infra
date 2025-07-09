@@ -1,6 +1,8 @@
 pipeline {
     agent any
 
+    // This is to accept parameters from the user
+    // when the pipeline is triggered manually
     parameters {
         choice(
             name: 'ENV',
@@ -19,6 +21,7 @@ pipeline {
         )
     }
 
+    // this is to checkout the code from the git repository
     stages {
         stage('Checkout Code') {
             steps {
@@ -32,6 +35,7 @@ pipeline {
             }
         }
 
+        // This is to run the playbook on the Ansible master server
         stage('Run Ansible Playbook') {
             steps {
                 script {
