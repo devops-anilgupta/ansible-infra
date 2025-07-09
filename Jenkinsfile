@@ -2,13 +2,21 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'ENV', choices: ['DEV', 'UAT', 'STAGE', 'PROD'], description: 'Choose target environment')
-        choice(name: 'PLAYBOOK', choices: [
-            'copy-files-internally.yml',
-            'jenkins-install.yml',
-            'nginx-setup.yml',
-            'site.yml'
-        ], description: 'Choose which Ansible playbook to run')
+        choice(
+            name: 'ENV',
+            choices: ['DEV', 'UAT', 'STAGE', 'PROD'],
+            description: 'Choose target environment'
+        )
+        choice(
+            name: 'PLAYBOOK',
+            choices: [
+                'copy-files-internally.yml',
+                'jenkins-install.yml',
+                'nginx-setup.yml',
+                'site.yml'
+            ],
+            description: 'Choose which Ansible playbook to run'
+        )
     }
 
     stages {
@@ -31,9 +39,14 @@ pipeline {
                     def playbookPath  = "playbooks/${params.PLAYBOOK}"
 
                     echo "Running ${params.PLAYBOOK} against ${params.ENV} environment"
-                    
+
                     def result = sh(
-                        script: "ansible-playbook -i '${inventoryPath}' '${playbookPath}'",
+                        script: """
+                        ssh ubuntu@ansible-master '
+                            cd /home/ubuntu/ansible-infra &&
+                            ansible-playbook -i "${inventoryPath}" "${playbookPath}"
+                        '
+                        """,
                         returnStatus: true
                     )
 
