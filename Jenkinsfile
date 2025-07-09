@@ -12,7 +12,7 @@ pipeline {
     }
 
     environment {
-        INVENTORY_PATH = "inventories/${params.ENV.toLowerCase()}/hosts.ini"
+        INVENTORY_PATH = "inventories/${params.ENV.toUpperCase()}/hosts.ini"
         PLAYBOOK_PATH  = "playbooks/${params.PLAYBOOK}"
     }
 
